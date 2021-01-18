@@ -1,0 +1,94 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Poppins;
+}
+body,html
+{
+    /* display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100%; */
+}
+.comment-section
+{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    /* display: none; */
+}
+.visible
+{
+    display: flex;
+}
+.invisible
+{
+    display: none;
+}
+.comments
+{
+    width:50%
+}
+.comment
+{
+    margin-top: 10px;
+    /* border: 1px solid black; */
+    padding: 20px;
+    box-shadow: 0px 0px 10px -5px black;
+    border-radius: 10px;
+}
+.username
+{
+    font-weight: 900;
+    font-size: 1.1em;
+}
+.comment-text
+{
+    padding:0px 0 10px;
+    word-wrap: break-word;
+}
+.like-icon
+{
+    cursor: pointer;
+    color: black;
+    margin: 0 10px 0 0;
+    display: inline-block;
+    /* border:1px solid red */
+}
+.like-icon-liked
+{
+    color:red;
+    /* background-color: red; */
+    animation: liked;
+    animation-duration: .4s;
+}
+.reply-icon
+{
+    cursor: pointer;
+    vertical-align: middle;
+    display: inline-block;
+    margin: 0 10px 0 0;
+
+}
+.send-icon
+{
+    cursor: pointer;
+    margin:10px;
+}
+.cancel-icon
+{
+    /* font-size: 72px; */
+    cursor: pointer;
+}
+@keyframes liked
+{
+    0%{transform: scale(1);}
+    30%{transform: scale(1.5);}
+    60%{transform: scale(0.6);}
+    90%{transform: scale(1.2);}
+    100%{transform: scale(1);}
+}

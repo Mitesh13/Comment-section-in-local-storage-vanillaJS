@@ -4,15 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Comment Section</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/e9b7658565.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <div class="comments"></div>
-    
-    <div class="add-comment">
-        <input type="text" name="textbox-comment" id="textbox">
-        <input type="submit" value="Comment" id="submit">
+    <div class="name">
+        <input type="text" name="name" id="name" placeholder="Enter your name">
+        <button id="nameRegister">Enter</button>
     </div>
-
+    <div class="comment-section">
+        <div class="comments"></div>
+        
+        <div class="add-comment">
+            <input type="text" name="textbox-comment" id="textbox">
+            <input type="submit" value="Comment" id="submit">
+        </div>
+        <button id="logout">Logout</button>
+    </div>
     <script src="app.js"></script>
 </body>
 </html>

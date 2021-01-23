@@ -7,22 +7,33 @@ const logoutBtn = document.getElementById("logout")
 const nameRegisterBtn = document.getElementById("nameRegister")
 const nameTextbox = document.getElementById("name")
 let commentsArr = []
-let temp = []
+let tempArr = []
 let username
-// var global
+var global
 
 window.addEventListener("load",e=>{
     
     firstScreen()
     
-
+    if(localStorage.getItem("comments"))
+    {
+        // commentsArr = JSON.parse(localStorage.getItem("comments"))
+        tempArr = JSON.parse(localStorage.getItem("comments"))
+        let x = tempArr
+        // console.log(x[0].replies,"Length:"+x[0].replies.length);
+        // console.log(x[0]);
+        // alert(x[0].replies.length)
+        // commentsArr=temp
+        // //console.log(commentsArr);
+        renderComments(true,tempArr)
+    }
 })
 function firstScreen()
 {
     username=localStorage.getItem("username")
     if(username)
     {
-        console.log("name Hai");
+        // console.log("name Hai");
         nameRegisterContainer.classList.add("invisible")
         nameRegisterContainer.classList.remove("visible")
 
@@ -41,22 +52,12 @@ function firstScreen()
     }
 }
 
-if(localStorage.getItem("comments"))
-{
-    // commentsArr = JSON.parse(localStorage.getItem("comments"))
-    commentsArr = JSON.parse(localStorage.getItem("comments"))
-    // commentsArr=temp
-    // //console.log(commentsArr);
-    renderComments(commentsArr)
-}
+
 
 nameRegisterBtn.addEventListener("click",e=>{
     if(nameTextbox.value)
     {
         username=nameTextbox.value
-        // commentSection.classList.toggle("visible")
-        // nameRegisterContainer.removeChild(nameRegisterBtn)
-        // nameRegisterContainer.removeChild(nameTextbox)
         localStorage.setItem("username",nameTextbox.value)
         firstScreen()
     }
@@ -66,8 +67,7 @@ logoutBtn.addEventListener("click",(e)=>{
     localStorage.removeItem("username")
     document.querySelector(".comment-section").classList.toggle("visible")
     
-    // nameRegisterContainer.appendChild(nameTextbox)
-    // nameRegisterContainer.appendChild(nameRegisterBtn)
+    
 
     console.log(localStorage.removeItem("username"));
     username=null
@@ -80,33 +80,46 @@ submitBtn.addEventListener("click",e=>{
     console.clear()
     addComment(true,textbox.value,username)
     localStorage.setItem("comments",JSON.stringify(commentsArr))
-    //console.log(JSON.parse(localStorage.getItem("comments")))
+    
 })
 
-function renderComments(comments)
+function renderComments(x,comments,p)
 {
-    comments.forEach(cmt=>{
-
-        //console.log(cmt);
-        addComment(false,cmt.text,cmt.name,cmt.likes,cmt.parent,cmt.id,cmt.replies)
-        if(cmt.replies.length > 0)
-            renderComments(cmt.replies)
-        })
-    return
+    
+    // console.log(comments[0].replies);
+    comments.forEach((cmt,i)=>{
+        let rand = Math.floor(Math.random()*30)
+        // console.log(cmt.text+rand+" index: "+i);
+        // setTimeout(()=>{
+            addComment(x,cmt.text,cmt.name,cmt.likes,cmt.parent,cmt.id,cmt.replies,p)
+            console.log(i);
+            if(cmt.replies.length > 0)
+            {
+                // console.log(cmt);
+                renderComments(true,comments[i].replies,cmt)
+                
+            }
+            console.log(cmt.text+" over");
+        // },1000)
+        
+    })
 }
 
-
-function addComment(doPush,textboxText,name,likes,parent,id,replies)
+function addComment(doPush,textboxText,name,likes,parent,id,replies,p)
 {
-    // console.log(name);
+    // console.log(replies);
     let obj=commentObj(id,name,replies,textboxText,likes,parent)
-    // global=obj
+    // console.log(obj.replies.length);
+    global=obj
     const container = document.createElement("div")
     const nameTag = document.createElement("p")
     const likesContainer = document.createElement("span")
     const repliesContainer = document.createElement("span")
-    const repliesContainer = document.createElement("span")
+    const expandComments = document.createElement("i")
     
+    expandComments.classList.add("fas")
+    expandComments.classList.add("fa-angle-down")
+
     container.setAttribute("id",obj.id)
     
     nameTag.innerHTML=name
@@ -120,7 +133,6 @@ function addComment(doPush,textboxText,name,likes,parent,id,replies)
     likesIcon.classList.add("fas")
     likesIcon.classList.add("fa-heart")
     likesIcon.classList.add("like-icon")
-    // likesIcon.style.display="inline-block"
     likesContainer.append(likesIcon)
 
     const repliesIcon = document.createElement("i")
@@ -129,39 +141,19 @@ function addComment(doPush,textboxText,name,likes,parent,id,replies)
     repliesIcon.classList.add("reply-icon")
     repliesContainer.append(repliesIcon)
     
-    // reply.innerHTML = "Reply"
     container.classList.add("comment")
     
-    // container.style.border = " 1px solid black"
-    // container.style.padding = "20px"
     
     likesIcon.addEventListener("click",(e)=>{
-        //console.log("hi");
-        let parentObj = findParent(commentsArr)
-        function findParent(arr)
-        {
-            let value
-            for(let i=0;i<arr.length;i++)
-            {
-                //console.log("matching:")
-                //console.log(arr[i].id, parent);
-                if(arr[i].id==obj.id)
-                    return arr[i]
-                if(arr[i].replies.length>0)
-                    value=findParent(arr[i].replies)
-                    if(value)
-                        return value
-            }
-        }
-        console.log(parentObj);
-        if(likesIcon.classList.contains("like-icon-liked"))
-            parentObj.likes-=1
-        else
-            parentObj.likes+=1
         
-        likesIcon.innerHTML=parentObj.likes
+        if(likesIcon.classList.contains("like-icon-liked"))
+            obj.likes-=1
+        else
+            obj.likes+=1
+        
+        likesIcon.innerHTML=obj.likes
         console.log(this);
-        console.log(parentObj.likes);
+        // console.log(parentObj.likes);
         console.log(commentsArr);
         localStorage.setItem("comments",JSON.stringify(commentsArr))
         console.log(localStorage.getItem("comments"));
@@ -190,7 +182,8 @@ function addComment(doPush,textboxText,name,likes,parent,id,replies)
         repliesIcon.style.display="none"
 
         submit.addEventListener("click",e=>{
-            addComment(true,tb.value,username,0,obj.id)
+            console.log(obj);
+            addComment(true,tb.value,username,0,obj)
             localStorage.setItem("comments",JSON.stringify(commentsArr))
             repliesIcon.style.display="inline-block"
             container.removeChild(tb)
@@ -212,80 +205,46 @@ function addComment(doPush,textboxText,name,likes,parent,id,replies)
     
     // if(doPush)
     // {
+        
         if(parent)
         {
-            //console.log("pushing inside",parent);
-
-            // let parentObj = commentsArr.filter(cmt=>cmt.id==parent)[0]
-            let parentObj = findParent(commentsArr)
-            //console.log("found?:",parentObj);
-            function findParent(arr)
-            {
-                let value
-                for(let i=0;i<arr.length;i++)
-                {
-                    //console.log("matching:")
-                    //console.log(arr[i].id, parent);
-                    if(arr[i].id==parent)
-                        return arr[i]
-                    if(arr[i].replies.length>0)
-                        value=findParent(arr[i].replies)
-                        if(value)
-                            return value
-                }
-            }
+            
+            // console.log("has parent");
             if(doPush)
-            parentObj.replies.push(obj)
+            {
+                if(p)
+                    p.replies.push(obj)
+                else
+                    parent.replies.push(obj)
+
+            }
+            
+            // console.log(obj.replies.length);
             container.style.marginLeft="30px"
-            document.getElementById(parentObj.id).append(container)
-
-            //console.log("pushed:",obj);
-
-            // parent.replies.push(obj)
-            // container.style.marginLeft="30px"
-            // document.getElementById(parent.id).append(container)
+            // console.log(parent);
+            if(p)
+                document.getElementById(p.id).append(container)
+            else
+                document.getElementById(parent.id).append(container)
         }
         else
         {
-            //console.log(textboxText,"in else");
             if(doPush)
                 commentsArr.push(obj)
             comments.append(container)
         }
-        // }
-        
-        // localStorage.getItem("comments")?localStorage.setItem("comments",JSON.stringify([...JSON.parse(localStorage.getItem("comments")),obj])) : localStorage.setItem("comments",JSON.stringify([obj]))
-        container.append(repliesContainer)
-        //console.log(commentsArr);
-        
-        
+        container.append(repliesContainer,expandComments)
         textbox.value=""
 }
 
 function commentObj(id,name,rep,comment,liked,parent)
 {
-    // if(parent)
-    console.log("liked?",liked);
-
     return{
         id:id ? id : Date.now(),
         name: name ? name : username,
-        parent:parent ? parent : null,
+        parent:parent ? parent.id : null,
         text:comment,
         replies:rep ? rep : [],
         likes:liked ? liked : 0
     }
 }
-let xObj={
-    id:Date.now()+"",
-    text:"hi",
-    replies:[{
-        id:Date.now()+"",
-        text:"hi",
-        replies:undefined  
-    }]
-}
-
-let x=[
-    xObj
-]

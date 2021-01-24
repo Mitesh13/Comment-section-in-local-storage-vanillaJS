@@ -96,7 +96,7 @@ function renderComments(x,comments,p)
             if(cmt.replies.length > 0)
             {
                 // console.log(cmt);
-                renderComments(true,comments[i].replies,cmt)
+                renderComments(false,comments[i].replies,cmt)
                 
             }
             console.log(cmt.text+" over");
@@ -115,10 +115,10 @@ function addComment(doPush,textboxText,name,likes,parent,id,replies,p)
     const nameTag = document.createElement("p")
     const likesContainer = document.createElement("span")
     const repliesContainer = document.createElement("span")
-    const expandComments = document.createElement("i")
+    // const expandComments = document.createElement("i")
     
-    expandComments.classList.add("fas")
-    expandComments.classList.add("fa-angle-down")
+    // expandComments.classList.add("fas")
+    // expandComments.classList.add("fa-angle-down")
 
     container.setAttribute("id",obj.id)
     
@@ -128,12 +128,12 @@ function addComment(doPush,textboxText,name,likes,parent,id,replies,p)
     commentText.classList.add("comment-text")
     commentText.innerHTML = textboxText
     
-    const likesIcon = document.createElement("i")
-    likesIcon.innerHTML = likes?likes:0
-    likesIcon.classList.add("fas")
-    likesIcon.classList.add("fa-heart")
-    likesIcon.classList.add("like-icon")
-    likesContainer.append(likesIcon)
+    // const likesIcon = document.createElement("i")
+    // likesIcon.innerHTML = likes?likes:0
+    // likesIcon.classList.add("fas")
+    // likesIcon.classList.add("fa-heart")
+    // likesIcon.classList.add("like-icon")
+    // likesContainer.append(likesIcon)
 
     const repliesIcon = document.createElement("i")
     repliesIcon.classList.add("far")
@@ -144,21 +144,21 @@ function addComment(doPush,textboxText,name,likes,parent,id,replies,p)
     container.classList.add("comment")
     
     
-    likesIcon.addEventListener("click",(e)=>{
+    // likesIcon.addEventListener("click",(e)=>{
         
-        if(likesIcon.classList.contains("like-icon-liked"))
-            obj.likes-=1
-        else
-            obj.likes+=1
+    //     if(likesIcon.classList.contains("like-icon-liked"))
+    //         obj.likes-=1
+    //     else
+    //         obj.likes+=1
         
-        likesIcon.innerHTML=obj.likes
-        console.log(this);
-        // console.log(parentObj.likes);
-        console.log(commentsArr);
-        localStorage.setItem("comments",JSON.stringify(commentsArr))
-        console.log(localStorage.getItem("comments"));
-        likesIcon.classList.toggle("like-icon-liked")
-    })
+    //     likesIcon.innerHTML=obj.likes
+    //     console.log(this);
+    //     // console.log(parentObj.likes);
+    //     console.log(commentsArr);
+    //     localStorage.setItem("comments",JSON.stringify(commentsArr))
+    //     console.log(localStorage.getItem("comments"));
+    //     likesIcon.classList.toggle("like-icon-liked")
+    // })
 
     repliesIcon.addEventListener("click",e=>{
         
@@ -201,7 +201,7 @@ function addComment(doPush,textboxText,name,likes,parent,id,replies,p)
         })
     })
     
-    container.append(nameTag,commentText,likesContainer)
+    container.append(nameTag,commentText)
     
     // if(doPush)
     // {
@@ -233,7 +233,7 @@ function addComment(doPush,textboxText,name,likes,parent,id,replies,p)
                 commentsArr.push(obj)
             comments.append(container)
         }
-        container.append(repliesContainer,expandComments)
+        container.append(repliesContainer)
         textbox.value=""
 }
 
